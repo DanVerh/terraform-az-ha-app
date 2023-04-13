@@ -5,7 +5,7 @@ provider "azurerm" {
 module "rg" {
   source = "./rg"
 
-  is_rg_required = true
+  is_rg_required = var.is_rg_required
   rg_name = var.rg
   rg_location = var.location
 }
@@ -45,5 +45,5 @@ module "vm" {
   vmname = "vm"
   username = "danverh"
   password = data.azurerm_key_vault_secret.this.value
-  ha = true
+  ha = var.ha
 }
