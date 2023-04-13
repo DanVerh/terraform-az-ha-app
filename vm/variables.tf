@@ -1,6 +1,5 @@
 variable "location" {
   description = "Location"
-  type = list
 }
 
 variable "rg" {

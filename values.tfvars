@@ -1,2 +1,2 @@
-location = ["East US"]
+location = "East US"
 rg = "web-app"

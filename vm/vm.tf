@@ -1,7 +1,7 @@
 resource "azurerm_network_interface" "this" {
-  count = (var.ha == true ? 2 : 1)
+  count = (var.ha ? 2 : 1)
   name                = format("${var.vmname}-nic-%d", count.index + 1)
-  location            = (length(var.location) > 1 ? tostring(element(var.location, count.index)) : tostring(element(var.location, 0)))
+  location            = var.location
   resource_group_name = var.rg
 
   ip_configuration {
@@ -12,10 +12,10 @@ resource "azurerm_network_interface" "this" {
 }
 
 resource "azurerm_linux_virtual_machine" "this" {
-  count = (var.ha == true ? 2 : 1)
+  count = (var.ha ? 2 : 1)
   name                = format("${var.vmname}-%d", count.index + 1)
   resource_group_name = var.rg
-  location            = (length(var.location) > 1 ? tostring(element(var.location, count.index)) : tostring(element(var.location, 0)))
+  location            = var.location
   size                = "Standard_B1s"
   admin_username      = var.username
   admin_password      = var.password

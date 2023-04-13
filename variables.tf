@@ -1,5 +1,3 @@
-variable location {
-  type = list(string)
-}
+variable location {}
 variable rg {}
 
