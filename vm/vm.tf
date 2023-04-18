@@ -8,6 +8,7 @@ resource "azurerm_network_interface" "this" {
     name                          = "internal"
     subnet_id                     = var.subnetid
     private_ip_address_allocation = "Dynamic"
+    public_ip_address_id          = var.pip
   }
 }
 

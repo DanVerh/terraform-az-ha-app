@@ -45,5 +45,6 @@ module "vm" {
   vmname = "vm"
   username = "danverh"
   password = data.azurerm_key_vault_secret.this.value
+  pip = var.ha ? null : module.network.pip_id
   ha = var.ha
 }

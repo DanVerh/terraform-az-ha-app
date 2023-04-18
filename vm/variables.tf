@@ -24,6 +24,10 @@ variable "vmname" {
   description = "Virtual Machine name"
 }
 
+variable "pip" {
+  description = "Public IP address ID"
+}
+
 variable "ha" {
   type = bool
   default = false
