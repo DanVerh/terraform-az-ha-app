@@ -5,7 +5,7 @@ provider "azurerm" {
 module "rg" {
   source = "./rg"
 
-  is_rg_required = var.is_rg_required
+  count = var.is_rg_required ? 1 : 0
   rg_name = var.rg
   rg_location = var.location
 }
