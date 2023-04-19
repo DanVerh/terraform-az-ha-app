@@ -2,6 +2,16 @@ provider "azurerm" {
   features {}
 }
 
+data "azurerm_key_vault" "this" {
+  name                = "danverh"
+  resource_group_name = "test"
+}
+
+data "azurerm_key_vault_secret" "this" {
+  name         = "vmss-password"
+  key_vault_id = data.azurerm_key_vault.this.id
+}
+
 module "rg" {
   source = "./rg"
 
@@ -26,14 +36,17 @@ module "network" {
   ]
 }
 
-data "azurerm_key_vault" "this" {
-  name                = "danverh"
-  resource_group_name = "test"
-}
+module "lb" {
+  source = "./lb"
 
-data "azurerm_key_vault_secret" "this" {
-  name         = "vmss-password"
-  key_vault_id = data.azurerm_key_vault.this.id
+  count = var.ha ? 1 : 0
+  rg = var.rg
+  location = var.location
+  pip = module.network.pip_id
+
+  depends_on = [
+    module.rg
+  ]
 }
 
 module "vm" {
@@ -46,5 +59,12 @@ module "vm" {
   username = "danverh"
   password = data.azurerm_key_vault_secret.this.value
   pip = var.ha ? null : module.network.pip_id
+  backend_address_pool_id = module.lb[0].backend_address_pool_id
+  as_id = module.lb[0].as_id
   ha = var.ha
+
+  depends_on = [
+    module.rg,
+    module.lb
+  ]
 }

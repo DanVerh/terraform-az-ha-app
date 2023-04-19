@@ -21,6 +21,7 @@ resource "azurerm_linux_virtual_machine" "this" {
   admin_username      = var.username
   admin_password      = var.password
   disable_password_authentication = false
+  availability_set_id = var.as_id
 
 
   network_interface_ids = [
@@ -38,4 +39,12 @@ resource "azurerm_linux_virtual_machine" "this" {
     sku       = "20_04-lts-gen2"
     version   = "latest"
   }
+}
+
+resource "azurerm_network_interface_backend_address_pool_association" "this" {
+  count               = var.ha ? 2 : 0
+
+  network_interface_id = azurerm_network_interface.this[count.index].id
+  ip_configuration_name = "internal"
+  backend_address_pool_id = var.backend_address_pool_id
 }

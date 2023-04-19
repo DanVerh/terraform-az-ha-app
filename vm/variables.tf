@@ -32,3 +32,6 @@ variable "ha" {
   type = bool
   default = false
 }
+
+variable "backend_address_pool_id" {}
+variable "as_id" {}
