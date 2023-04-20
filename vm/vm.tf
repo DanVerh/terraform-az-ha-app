@@ -22,6 +22,9 @@ resource "azurerm_linux_virtual_machine" "this" {
   admin_password      = var.password
   disable_password_authentication = false
   availability_set_id = var.as_id
+  user_data = base64encode(templatefile("./script/webserver.tftpl", {
+    vm = format("${var.vmname}-%d", count.index + 1)
+  }))
 
 
   network_interface_ids = [
